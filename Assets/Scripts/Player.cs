@@ -4,15 +4,31 @@ using TMPro;
 
 public class Player : Character
 {
+    
+    public static Player instancia;
+
     [SerializeField] private TextMeshProUGUI vidasText;
-    [SerializeField] private TextMeshProUGUI EnemigosText;
-    private int Enemigos;
+
+    
+    [SerializeField] private TextMeshProUGUI textoContador;
+    [HideInInspector] public int contador = 0;
+
+    void Awake()
+    {
+      
+        instancia = this;
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+      
         m_vidaActual = m_vida;
+
         ActualizarTexto();
+        ActualizarTextoContador(); 
+
         Debug.Log(m_vidaActual);
     }
 
@@ -20,6 +36,13 @@ public class Player : Character
     {
         Move();
         Die();
+    }
+
+   
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage); 
+        ActualizarTexto();       
     }
 
     public void OnMove(InputValue inputValue)
@@ -41,26 +64,24 @@ public class Player : Character
         if (collider.gameObject.CompareTag("Trampa"))
         {
             DamagePlayer(10);
-            ActualizarTexto();
-        }
-
-       
-        if (collider.gameObject.CompareTag("Enemy"))
-        {
-            Enemigos++; 
-            ActualizarTexto();
+            
         }
     }
+
     void ActualizarTexto()
     {
         if (vidasText != null)
         {
             vidasText.text = "Vidas: " + m_vidaActual;
         }
+    }
 
-        if (EnemigosText != null)
+    
+    public void ActualizarTextoContador()
+    {
+        if (textoContador != null)
         {
-            EnemigosText.text = "Enemigos: " + Enemigos;
+            textoContador.text = "Trampas: " + contador;
         }
     }
 }
