@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections;
 
 public class Player : Character
 {
@@ -8,10 +9,19 @@ public class Player : Character
     public static Player instancia;
 
     [SerializeField] private TextMeshProUGUI vidasText;
-
-    
     [SerializeField] private TextMeshProUGUI textoContador;
     [HideInInspector] public int contador = 0;
+
+    public Transform spawnPoint;
+    public GameObject bullet;
+    public float shotForce = 1500f;
+    public float shotRate = 0.5f;
+    public float lifeTime = 3f;
+    private float nextShotTime;
+
+    [SerializeField] private float sensibilidadMouse;
+    private Vector2 mira;
+
 
     void Awake()
     {
@@ -25,11 +35,11 @@ public class Player : Character
 
       
         m_vidaActual = m_vida;
-
+        Debug.Log(m_vidaActual);
         ActualizarTexto();
         ActualizarTextoContador(); 
 
-        Debug.Log(m_vidaActual);
+       
     }
 
     void FixedUpdate()
@@ -70,7 +80,7 @@ public class Player : Character
 
     void ActualizarTexto()
     {
-        if (vidasText != null)
+        
         {
             vidasText.text = "Vidas: " + m_vidaActual;
         }
@@ -79,9 +89,42 @@ public class Player : Character
     
     public void ActualizarTextoContador()
     {
-        if (textoContador != null)
+        
         {
             textoContador.text = "Trampas: " + contador;
         }
     }
+
+
+
+    public void OnAttack(InputValue value)
+    {
+        if (value.isPressed && Time.time >= nextShotTime)
+        {
+            nextShotTime = Time.time + shotRate;
+
+            GameObject newBullet = Instantiate(bullet, spawnPoint.position, spawnPoint.rotation);
+            newBullet.GetComponent<Rigidbody>().AddForce(spawnPoint.forward * shotForce);
+
+
+            StartCoroutine(DestroyBullet(newBullet));
+        }
+    }
+
+
+    private IEnumerator DestroyBullet(GameObject Bullet)
+        
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Destroy(Bullet);
+    }
+
+
+  
+
+    
+    
+  
+
+
 }

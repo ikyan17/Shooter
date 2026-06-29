@@ -15,16 +15,16 @@ public class EnemyController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        if (player == null)
+        
         {
             GameObject jugadorObj = GameObject.FindGameObjectWithTag("Player");
-            if (jugadorObj != null) player = jugadorObj.transform;
+            player = jugadorObj.transform;
         }
     }
 
     void FixedUpdate()
     {
-        if (muerto || player == null || rb == null) return;
+        
 
         
         float distancia = Vector3.Distance(transform.position, player.position);
@@ -59,7 +59,9 @@ public class EnemyController : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Player jugador = collision.gameObject.GetComponent<Player>();
-            jugador?.DamagePlayer(10f);
+            
+            jugador.DamagePlayer(10f);
+            
         }
     }
 
@@ -67,23 +69,25 @@ public class EnemyController : MonoBehaviour
     {
         if (muerto) return;
 
-        if (collision.gameObject.CompareTag("Bala"))
         {
-            vida--;
-            if (vida <= 0) Muerte();
+            if (collision.gameObject.CompareTag("Bala"))
+            {
+                vida--;
+                if (vida <= 0) Muerte();
+            }
+
         }
+
+        
     }
 
     void Muerte()
     {
         muerto = true;
-        if (rb != null) rb.linearVelocity = Vector3.zero;
+      
+        rb.linearVelocity = Vector3.zero;
 
-        foreach (Collider col in GetComponents<Collider>())
-        {
-            col.enabled = false;
-        }
-
+        gameObject.SetActive(false);
         Destroy(gameObject, 0.5f);
     }
 }

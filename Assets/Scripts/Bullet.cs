@@ -6,15 +6,10 @@ public class Bullet : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Trampa"))
         {
-            
-            if (Player.instancia != null)
-            {
-                
-                Player.instancia.contador++;
-
-                
+                                                 
+                Player.instancia.contador++;       
                 Player.instancia.ActualizarTextoContador();
-            }
+            
 
             Destroy(collider.gameObject); 
             Destroy(gameObject);          
