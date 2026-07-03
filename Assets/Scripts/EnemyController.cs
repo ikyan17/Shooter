@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("Configuración")]
+    
     [SerializeField] private Transform player;
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float detectionRadius = 12.0f;
-    [SerializeField] private int vida = 3;
+   
 
+   
     private Rigidbody rb;
     private bool muerto = false;
 
@@ -44,6 +45,7 @@ public class EnemyController : MonoBehaviour
             {
                 transform.forward = direccion;
             }
+
         }
         else
         {
@@ -65,21 +67,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider collision)
-    {
-        if (muerto) return;
-
-        {
-            if (collision.gameObject.CompareTag("Bala"))
-            {
-                vida--;
-                if (vida <= 0) Muerte();
-            }
-
-        }
-
-        
-    }
+   
 
     void Muerte()
     {
@@ -90,4 +78,7 @@ public class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
         Destroy(gameObject, 0.5f);
     }
+
+
+
 }
