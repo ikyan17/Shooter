@@ -1,49 +1,60 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class enemigoshooter : MonoBehaviour
-
-
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private GameObject Bullet;
+    [SerializeField] private Transform spawnBullet;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject bulletPrefab;
 
-    [SerializeField] private Transform pointBullet;
+    [SerializeField] private float visionRange;
+    [SerializeField] private float shootDelayTime;
+    [SerializeField] private float movementTime;
+    [SerializeField] private float movementRange;
 
-    [SerializeField] private float distanciaDeteccion;
-    [SerializeField] private float timeBullet;
-
-    [SerializeField] bool Disparo;
+    [SerializeField] private bool canShoot = true;
 
     void Start()
     {
-
     }
-
 
     void Update()
     {
-        DetectionDistance();
+        DetectedPlayer();
     }
 
-    void DetectionDistance()
+    void DetectedPlayer()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        if (distance <= distanciaDeteccion && Disparo)
+        if (player != null)
         {
-            StartCoroutine(TimeBullet());
+            transform.LookAt(player.transform);
+
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+
+            if (distance < visionRange)
+            {
+                if (canShoot)
+                {
+                    StartCoroutine(Shoot());
+                }
+            }
         }
     }
 
-    IEnumerator TimeBullet()
+    IEnumerator Shoot()
     {
-        Disparo = false;
-        yield return new WaitForSeconds(timeBullet);
+        canShoot = false;
 
-        Instantiate(Bullet, pointBullet.position, pointBullet.rotation);
+        GameObject newBullet = Instantiate(bulletPrefab, spawnBullet.position, spawnBullet.rotation);
+        
+        Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = spawnBullet.forward * 20f;
+        }
 
-        Disparo = true;
+        yield return new WaitForSeconds(shootDelayTime);
+        
+        canShoot = true;
     }
 }

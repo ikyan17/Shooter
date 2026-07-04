@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
@@ -118,13 +119,5 @@ public class Player : Character
         yield return new WaitForSeconds(lifeTime);
         Destroy(Bullet);
     }
-
-
-  
-
-    
-    
-  
-
 
 }
