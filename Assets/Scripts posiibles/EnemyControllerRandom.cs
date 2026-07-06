@@ -17,8 +17,8 @@ public class enemigoshooter : MonoBehaviour
 
     void Start()
     {
-        
-      
+
+
     }
 
     void Update()
@@ -60,19 +60,19 @@ public class enemigoshooter : MonoBehaviour
         }
 
         yield return new WaitForSeconds(shootDelayTime);
-        
+
         canShoot = true;
     }
 
 
-   
+
 
     private IEnumerator DestroyBala(GameObject Bala)
     {
         yield return new WaitForSeconds(lifeTime);
-               
-        
-            Destroy(Bala);
-        
+
+
+        Destroy(Bala);
+
     }
 }
