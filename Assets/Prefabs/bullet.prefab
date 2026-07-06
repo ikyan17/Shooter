@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3084014823129415348}
   - component: {fileID: 6200037453690976528}
   - component: {fileID: 5450959877560314814}
-  - component: {fileID: -5271796120317635951}
+  - component: {fileID: -2310358313320130549}
   m_Layer: 0
   m_Name: bullet
   m_TagString: Bala
@@ -141,7 +141,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-5271796120317635951
+--- !u!114 &-2310358313320130549
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

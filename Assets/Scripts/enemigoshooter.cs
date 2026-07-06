@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class enemigoshooter : MonoBehaviour
 {
-    [SerializeField] private Transform spawnBala;
+    [SerializeField] private Transform spawnBullet;
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject BalaPrefab;
+    [SerializeField] private GameObject BulletPrefab;
 
     [SerializeField] private float visionRange;
     [SerializeField] private float shootDelayTime;
@@ -14,7 +14,7 @@ public class enemigoshooter : MonoBehaviour
     [SerializeField] public float lifeTime = 3f;
 
     [SerializeField] private bool canShoot = true;
-
+    [SerializeField] private bool esDelJugador = true;
     void Start()
     {
         
@@ -48,31 +48,38 @@ public class enemigoshooter : MonoBehaviour
     {
         canShoot = false;
 
-        GameObject newBullet = Instantiate(BalaPrefab, spawnBala.position, spawnBala.rotation);
+        GameObject newBullet = Instantiate(BulletPrefab, spawnBullet.position, spawnBullet.rotation);
         Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+
+        Bullet scriptBala = newBullet.GetComponent<Bullet>();
+        if (scriptBala != null)
+        {
+            scriptBala.esDelJugador = false;
+        }
 
         StartCoroutine(DestroyBala(newBullet));
 
-
         if (rb != null)
         {
-            rb.linearVelocity = spawnBala.forward * 20f;
+            rb.linearVelocity = spawnBullet.forward * 20f;
         }
 
         yield return new WaitForSeconds(shootDelayTime);
-        
         canShoot = true;
     }
 
 
-   
 
-    private IEnumerator DestroyBala(GameObject Bala)
+
+
+    private IEnumerator DestroyBala(GameObject Bullet)
     {
         yield return new WaitForSeconds(lifeTime);
                
         
-            Destroy(Bala);
+            Destroy(Bullet);
         
     }
+    
+
 }
