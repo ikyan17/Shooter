@@ -54,4 +54,7 @@ public class Character : MonoBehaviour
             this.gameObject.SetActive(false);
         }
     }
+
+
+
 }

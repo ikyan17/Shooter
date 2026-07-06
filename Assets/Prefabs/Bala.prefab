@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7503925161311903963}
   - component: {fileID: 2991824374140766600}
   - component: {fileID: 5311002770780066676}
-  - component: {fileID: -4303345770117651292}
+  - component: {fileID: -4525718733930733925}
+  - component: {fileID: 8844333405249462823}
   m_Layer: 0
   m_Name: Bala
   m_TagString: Untagged
@@ -113,7 +114,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-4303345770117651292
+--- !u!114 &-4525718733930733925
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,5 +126,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367099abd5b7ff54f87461c611d9cc16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bala
-  speed: 10
-  lifeTime: 3
+  player: {fileID: 0}
+  speed: 3
+  detectionRadius: 12
+--- !u!54 &8844333405249462823
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598462743974335465}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
