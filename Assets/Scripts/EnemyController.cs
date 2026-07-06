@@ -57,13 +57,14 @@ public class EnemyController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (muerto) return;
-
-        if (collision.gameObject.CompareTag("Player"))
         {
-            Player jugador = collision.gameObject.GetComponent<Player>();
-            
-            jugador.DamagePlayer(10f);
-            
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                Player jugador = collision.gameObject.GetComponent<Player>();
+
+                jugador.DamagePlayer(10f);
+
+            }
         }
     }
 
