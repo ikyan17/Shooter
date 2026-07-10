@@ -1,15 +1,13 @@
 using UnityEngine;
 
+
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float detectionRadius = 12.0f;
-
     [SerializeField] private float vidaMaxima = 30f;
     private float vidaActual;
-
-    
     [SerializeField] private float dañoAtaque = 10f;
 
     private Rigidbody rb;
@@ -20,21 +18,13 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         vidaActual = vidaMaxima;
 
-        // Busca al jugador automáticamente al nacer
         GameObject jugadorObj = GameObject.FindGameObjectWithTag("Player");
-        if (jugadorObj != null)
-        {
-            player = jugadorObj.transform;
-        }
+        if (jugadorObj != null) player = jugadorObj.transform;
     }
 
     void FixedUpdate()
     {
-        if (muerto) return;
-
-        // 🛡️ SEGURIDAD: Si aún no encuentra al jugador, salimos de la función 
-        // para evitar que el script se rompa y se vuelva inmortal.
-        if (player == null) return;
+        if (muerto || player == null) return;
 
         float distancia = Vector3.Distance(transform.position, player.position);
 
@@ -46,10 +36,7 @@ public class EnemyController : MonoBehaviour
 
             rb.linearVelocity = new Vector3(direccion.x * speed, rb.linearVelocity.y, direccion.z * speed);
 
-            if (direccion != Vector3.zero)
-            {
-                transform.forward = direccion;
-            }
+            if (direccion != Vector3.zero) transform.forward = direccion;
         }
         else
         {
@@ -64,11 +51,7 @@ public class EnemyController : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Player jugador = collision.gameObject.GetComponent<Player>();
-            if (jugador != null)
-            {
-                
-                jugador.TakeDamage(dañoAtaque);
-            }
+            if (jugador != null) jugador.TakeDamage(dañoAtaque);
         }
     }
 
@@ -79,28 +62,20 @@ public class EnemyController : MonoBehaviour
         vidaActual -= cantidad;
         Debug.Log(gameObject.name + " (Melee) dañado. Vida restante: " + vidaActual);
 
-        if (vidaActual <= 0)
-        {
-            Muerte();
-        }
+        if (vidaActual <= 0) Muerte();
     }
 
     void Muerte()
     {
         muerto = true;
 
-        // 💥 NUEVO: Le avisa al Player que este enemigo Melee murió
         if (Player.instancia != null)
         {
             Player.instancia.contador++;
             Player.instancia.ActualizarTextoContador();
         }
 
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-        }
-
+        rb.linearVelocity = Vector3.zero;
         Destroy(gameObject);
     }
 }
