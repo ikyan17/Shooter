@@ -9,9 +9,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float vidaMaxima = 30f;
     private float vidaActual;
 
-    // =======================================================
-    // ✨ NUEVA VARIABLE: Modificable desde el Inspector
-    // =======================================================
+    
     [SerializeField] private float dañoAtaque = 10f;
 
     private Rigidbody rb;
@@ -68,9 +66,7 @@ public class EnemyController : MonoBehaviour
             Player jugador = collision.gameObject.GetComponent<Player>();
             if (jugador != null)
             {
-                // =======================================================
-                // MODIFICADO: Ahora usa la variable en lugar del 10f fijo
-                // =======================================================
+                
                 jugador.TakeDamage(dañoAtaque);
             }
         }
