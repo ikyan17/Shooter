@@ -26,16 +26,12 @@ public class Player : Character
     [SerializeField] private float sensibilidadMouse;
     private Vector2 mira;
 
-    // ==========================================
-    // ✨ NUEVAS VARIABLES PARA EL DASH
-    // ==========================================
     [Header("Configuración del Dash")]
-    [SerializeField] private float fuerzaDash = 25f;       // Qué tan rápido sale disparado
-    [SerializeField] private float duracionDash = 0.2f;    // Cuánto tiempo dura el impulso
-    [SerializeField] private float cooldownDash = 1f;      // Cuánto esperar para usarlo otra vez
+    [SerializeField] private float fuerzaDash = 25f;       
+    [SerializeField] private float duracionDash = 0.2f;    
+    [SerializeField] private float cooldownDash = 1f;      
     private bool puedeDash = true;
     private bool estaDashing = false;
-
 
     void Awake()
     {
@@ -55,8 +51,6 @@ public class Player : Character
 
     void FixedUpdate()
     {
-        // MODIFICADO: Si está haciendo Dash, detenemos el Move() normal 
-        // para que las físicas no frenen el impulso.
         if (!estaDashing)
         {
             Move();
@@ -78,110 +72,6 @@ public class Player : Character
 
     public void OnJump(InputValue value)
     {
-        // Evitamos saltar si estamos en medio de un Dash
         if (value.isPressed && EstaEnSuelo() && !estaDashing)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaSalto, rb.linearVelocity.z);
-        }
-    }
-
-    // ==========================================
-    // ✨ NUEVA FUNCIÓN DE INPUT SYSTEM PARA EL DASH
-    // ==========================================
-    public void OnDash(InputValue value)
-    {
-        // Si presionas el botón, no estás en cooldown y no estás haciendo dash actualmente
-        if (value.isPressed && puedeDash && !estaDashing)
-        {
-            StartCoroutine(EjecutarDash());
-        }
-    }
-
-    // Corrutina que controla la fuerza y el tiempo del Dash
-    private IEnumerator EjecutarDash()
-    {
-        puedeDash = false;
-        estaDashing = true;
-
-        // Calculamos la dirección del Dash usando tu 'inputMove' actual en el plano 3D
-        Vector3 direccionDash = new Vector3(inputMove.x, 0f, inputMove.y).normalized;
-
-        // Si el jugador no se está moviendo, el Dash se hace hacia el frente del personaje
-        if (direccionDash == Vector3.zero)
-        {
-            direccionDash = transform.forward;
-        }
-
-        float tiempoInicio = Time.time;
-
-        // Durante el tiempo que dure el Dash, forzamos la velocidad del Rigidbody
-        while (Time.time < tiempoInicio + duracionDash)
-        {
-            rb.linearVelocity = new Vector3(direccionDash.x * fuerzaDash, rb.linearVelocity.y, direccionDash.z * fuerzaDash);
-            yield return new WaitForFixedUpdate(); // Sincronizado con las físicas de Unity
-        }
-
-        estaDashing = false;
-
-        // Tiempo de espera antes de poder volver a usarlo
-        yield return new WaitForSeconds(cooldownDash);
-        puedeDash = true;
-    }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.gameObject.CompareTag("Trampa"))
-        {
-            DamagePlayer(10);
-        }
-
-        if (collider.gameObject.CompareTag("Moneda"))
-        {
-            monedasColectadas++;
-            ActualizarTextoMonedas();
-            Destroy(collider.gameObject);
-
-            if (monedasColectadas >= 10)
-            {
-                SceneManager.LoadScene("You win");
-            }
-        }
-    }
-
-    void ActualizarTexto()
-    {
-        vidasText.text = "Vidas: " + m_vidaActual;
-    }
-
-    public void ActualizarTextoContador()
-    {
-        textoContador.text = "Enemigos: " + contador;
-    }
-
-    void ActualizarTextoMonedas()
-    {
-        if (monedasText != null)
-        {
-            monedasText.text = "Monedas: " + monedasColectadas;
-        }
-    }
-
-    public void OnAttack(InputValue value)
-    {
-        if (value.isPressed && Time.time >= nextShotTime)
-        {
-            nextShotTime = Time.time + shotRate;
-
-            GameObject newBullet = Instantiate(bullet, spawnPoint.position, spawnPoint.rotation);
-            newBullet.GetComponent<Rigidbody>().AddForce(spawnPoint.forward * shotForce);
-
-            StartCoroutine(DestroyBullet(newBullet));
-        }
-    }
-
-    private IEnumerator DestroyBullet(GameObject Bullet)
-    {
-        yield return new WaitForSeconds(lifeTime);
-        Destroy(Bullet);
-    }
-}
+            rb.linearVelocity = new Vector3(rb.
