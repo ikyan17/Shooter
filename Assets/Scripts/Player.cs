@@ -74,4 +74,98 @@ public class Player : Character
     {
         if (value.isPressed && EstaEnSuelo() && !estaDashing)
         {
-            rb.linearVelocity = new Vector3(rb.
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaSalto, rb.linearVelocity.z);
+        }
+    }
+
+    public void OnDash(InputValue value)
+    {
+        if (value.isPressed && puedeDash && !estaDashing)
+        {
+            StartCoroutine(EjecutarDash());
+        }
+    }
+
+    private IEnumerator EjecutarDash()
+    {
+        puedeDash = false;
+        estaDashing = true;
+
+        Vector3 direccionDash = new Vector3(inputMove.x, 0f, inputMove.y).normalized;
+
+        if (direccionDash == Vector3.zero)
+        {
+            direccionDash = transform.forward;
+        }
+
+        float tiempoInicio = Time.time;
+
+        while (Time.time < tiempoInicio + duracionDash)
+        {
+            rb.linearVelocity = new Vector3(direccionDash.x * fuerzaDash, rb.linearVelocity.y, direccionDash.z * fuerzaDash);
+            yield return new WaitForFixedUpdate(); 
+        }
+
+        estaDashing = false;
+
+        yield return new WaitForSeconds(cooldownDash);
+        puedeDash = true;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Trampa"))
+        {
+            DamagePlayer(10);
+        }
+
+        if (collider.gameObject.CompareTag("Moneda"))
+        {
+            monedasColectadas++;
+            ActualizarTextoMonedas();
+            Destroy(collider.gameObject);
+
+            if (monedasColectadas >= 10)
+            {
+                SceneManager.LoadScene("You win");
+            }
+        }
+    }
+
+    void ActualizarTexto()
+    {
+        vidasText.text = "Vidas: " + m_vidaActual;
+    }
+
+    public void ActualizarTextoContador()
+    {
+        textoContador.text = "Enemigos: " + contador;
+    }
+
+    void ActualizarTextoMonedas()
+    {
+        if (monedasText != null)
+        {
+            monedasText.text = "Monedas: " + monedasColectadas;
+        }
+    }
+
+    public void OnAttack(InputValue value)
+    {
+        if (value.isPressed && Time.time >= nextShotTime)
+        {
+            nextShotTime = Time.time + shotRate;
+
+            GameObject newBullet = Instantiate(bullet, spawnPoint.position, spawnPoint.rotation);
+            newBullet.GetComponent<Rigidbody>().AddForce(spawnPoint.forward * shotForce);
+
+            StartCoroutine(DestroyBullet(newBullet));
+        }
+    }
+
+    private IEnumerator DestroyBullet(GameObject Bullet)
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Destroy(Bullet);
+    }
+}
