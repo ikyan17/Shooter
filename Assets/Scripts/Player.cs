@@ -11,6 +11,8 @@ public class Player : Character
     [SerializeField] private TextMeshProUGUI vidasText;
     [SerializeField] private TextMeshProUGUI textoContador;
     [SerializeField] private TextMeshProUGUI monedasText;
+    [SerializeField] private Animator animator;
+
 
     [HideInInspector] public int contador = 0;
     private int monedasColectadas = 0;
@@ -47,6 +49,8 @@ public class Player : Character
         ActualizarTexto();
         ActualizarTextoContador();
         ActualizarTextoMonedas();
+
+        animator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -76,6 +80,9 @@ public class Player : Character
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaSalto, rb.linearVelocity.z);
         }
+
+
+
     }
 
     public void OnDash(InputValue value)
@@ -168,4 +175,12 @@ public class Player : Character
         yield return new WaitForSeconds(lifeTime);
         Destroy(Bullet);
     }
+
+
+    private void SetAnimationState 
+        (string AnimationName, bool state)
+    {
+        animator.SetBool(AnimationName, state);
+    }
+
 }
